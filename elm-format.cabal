@@ -60,7 +60,9 @@ Executable elm-format
         process,
         regex-applicative >= 0.3.3 && < 0.4,
         split >= 0.2.2 && < 0.3,
-        text
+        text,
+        vector,
+        scientific
 
 Test-Suite elm-format-tests
     Type:

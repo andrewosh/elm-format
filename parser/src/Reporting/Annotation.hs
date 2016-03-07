@@ -4,6 +4,7 @@ import Prelude hiding (map)
 import qualified Reporting.PrettyPrint as P
 import qualified Reporting.Region as R
 import qualified Data.String as String
+import Data.Aeson as JSON
 
 
 -- ANNOTATION
@@ -23,7 +24,6 @@ instance (Show a) => Show (Located a) where
             , show (R.column $ R.end r)
             , showsPrec 99 a ""
             ]
-
 
 -- CREATE
 

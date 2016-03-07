@@ -17,11 +17,12 @@ import qualified Data.ByteString.Lazy as Lazy
 import qualified Data.Text as Text
 import qualified Data.Text.Encoding as Text
 import qualified ElmFormat.Parse as Parse
-import qualified ElmFormat.Render.Text as Render
+import qualified ElmFormat.Render.Json as Render
 import qualified ElmFormat.Filesystem as FS
 import qualified Reporting.Error.Syntax as Syntax
 import qualified Reporting.Result as Result
 import qualified System.Directory as Dir
+import qualified Data.Aeson as JSON
 
 
 -- If elm-format was successful, writes the results to the output
@@ -37,14 +38,17 @@ writeResult outputFile inputFilename inputText result =
         Result.Result _ (Result.Ok modu) ->
             let rendered =
                     Render.render modu
-                        |> Text.encodeUtf8
+                        |> JSON.encode
+                        |> Lazy.toStrict
+                        |> Text.decodeUtf8
+                        |> Text.unpack
             in
                 case outputFile of
                     Nothing ->
-                        Char8.putStr rendered
+                        putStr rendered
 
                     Just path -> do
-                        ByteString.writeFile path rendered
+                        writeFile path rendered
 
         Result.Result _ (Result.Err errs) ->
             do
